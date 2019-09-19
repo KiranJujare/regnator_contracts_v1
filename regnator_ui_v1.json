@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "version" : "v1",
-    "title" : "Regnator",
+    "title" : "Regnator v1 Draft",
     "description" : "Regnator UI Contracts"
   },
   "paths" : {
