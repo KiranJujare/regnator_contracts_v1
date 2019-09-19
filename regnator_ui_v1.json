@@ -1,0 +1,2724 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "v1",
+    "title" : "Regnator v1 Draft",
+    "description" : "Regnator UI Contracts"
+  },
+  "paths" : {
+    "/lookups/{lookup_external_id}/fact_sets/{fact_set_id}/facts" : {
+      "post" : {
+        "summary" : "Fact Creation.",
+        "tags" : [ "Facts" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/fact_set_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "facts" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "example" : "vertical"
+                        },
+                        "group_name" : {
+                          "type" : "string",
+                          "example" : "attribute"
+                        },
+                        "value_type" : {
+                          "type" : "string",
+                          "enum" : [ "BOOLEAN", "STRING", "INT", "DECIMAL" ],
+                          "example" : "STRING"
+                        },
+                        "description" : {
+                          "type" : "string",
+                          "example" : "vertical"
+                        },
+                        "value_set" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "value" : {
+                                "type" : "string",
+                                "example" : "mobile"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Create fact with details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "fact_id" : {
+                        "type" : "integer",
+                        "example" : 1
+                      },
+                      "name" : {
+                        "type" : "string",
+                        "example" : "is_broken_screen"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/fact_sets/{fact_set_id}/facts/{fact_id}" : {
+      "put" : {
+        "summary" : "Update Fact.",
+        "tags" : [ "Facts" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/fact_set_id"
+        }, {
+          "$ref" : "#/components/parameters/fact_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "is_broken_screen"
+                  },
+                  "group_name" : {
+                    "type" : "string",
+                    "example" : "physical"
+                  },
+                  "description" : {
+                    "type" : "string",
+                    "example" : "Is Screen Broken ?"
+                  },
+                  "value_type" : {
+                    "type" : "string",
+                    "example" : "Boolean"
+                  },
+                  "value_set" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "required" : [ "value" ],
+                      "properties" : {
+                        "value" : {
+                          "type" : "string",
+                          "example" : "mobile"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Updated fact with details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "fact_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "example" : "is_broken_screen"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/facts/" : {
+      "get" : {
+        "summary" : "Fetch Fact details based on ids.",
+        "tags" : [ "Facts" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "in" : "query",
+          "name" : "fact_ids",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : false,
+          "description" : "Fact Id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return facts details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "facts" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "required" : [ "name", "group_name", "value_type", "value_set" ],
+                        "properties" : {
+                          "fact_id" : {
+                            "type" : "integer",
+                            "example" : 1
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "example" : "is_broken_screen"
+                          },
+                          "description" : {
+                            "type" : "string",
+                            "example" : "Is Screen Broken ?"
+                          },
+                          "group_name" : {
+                            "type" : "string",
+                            "example" : "physical"
+                          },
+                          "default_value" : {
+                            "type" : "string",
+                            "example" : true
+                          },
+                          "value_type" : {
+                            "type" : "string",
+                            "enum" : [ "BOOLEAN", "STRING", "INT", "DECIMAL" ],
+                            "example" : "STRING"
+                          },
+                          "possible_values" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "required" : [ "display_name", "value" ],
+                              "properties" : {
+                                "display_name" : {
+                                  "type" : "string",
+                                  "example" : true
+                                },
+                                "value" : {
+                                  "type" : "string",
+                                  "example" : true
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/meta/facts/value_types" : {
+      "get" : {
+        "summary" : "Fetch Fact value types.",
+        "tags" : [ "Meta" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return facts details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "value_types" ],
+                  "properties" : {
+                    "value_types" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "string",
+                        "enum" : [ "BOOLEAN", "STRING", "INT", "DECIMAL" ]
+                      },
+                      "example" : [ "BOOLEAN", "STRING", "INT", "DECIMAL" ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/meta/rules/operators" : {
+      "get" : {
+        "summary" : "Get Rule Operators.",
+        "tags" : [ "Meta" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return rule operator details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "value_types" ],
+                  "properties" : {
+                    "operators" : {
+                      "type" : "object",
+                      "properties" : {
+                        "complex_expression" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string",
+                            "enum" : [ "ALL", "ANY" ]
+                          },
+                          "example" : [ "ALL", "ANY" ]
+                        },
+                        "simple_expressions" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "string",
+                            "enum" : [ "NOT_EQUAL_TO", "EQUAL_TO", "GREATER_THAN", "LESS_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN_OR_EQUAL_TO", "PRESENT_IN", "NOT_IN", "CONTAINS_ANY", "CONTAINS_ALL", "CONTAINS_NONE", "NOT_SUB_SET", "IS_BLANK" ]
+                          },
+                          "example" : [ "NOT_EQUAL_TO", "EQUAL_TO", "GREATER_THAN", "LESS_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN_OR_EQUAL_TO", "PRESENT_IN", "NOT_IN", "CONTAINS_ANY", "CONTAINS_ALL", "CONTAINS_NONE", "NOT_SUB_SET", "IS_BLANK" ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/fact_sets" : {
+      "post" : {
+        "summary" : "Create FactSet.",
+        "tags" : [ "FactSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "WH_DPV_grading results"
+                  },
+                  "fact_ids" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "integer"
+                    },
+                    "example" : [ 1, 2, 10 ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "FactSet created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "fact_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/fact_sets/{fact_set_id}" : {
+      "put" : {
+        "summary" : "Update FactSet.",
+        "tags" : [ "FactSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/fact_set_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "WH_DPV_grading results"
+                  },
+                  "fact_ids" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "integer"
+                    },
+                    "example" : [ 1, 2 ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "FactSet update successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "fact_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/fact_sets/{fact_set_ids}" : {
+      "get" : {
+        "summary" : "Get FactSet by Ids",
+        "tags" : [ "FactSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "in" : "path",
+          "name" : "fact_set_ids",
+          "required" : true,
+          "description" : "Fact Set Ids",
+          "schema" : {
+            "type" : "string",
+            "example" : "1,2,3"
+          }
+        }, {
+          "in" : "query",
+          "name" : "include_facts",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "Include fact details"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return factset details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "fact_sets" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/FactSet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/rule_sets" : {
+      "post" : {
+        "summary" : "Create RuleSet.",
+        "tags" : [ "RuleSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Movement rules"
+                  },
+                  "rules" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "rule_external_id" : {
+                          "type" : "string",
+                          "example" : "1"
+                        },
+                        "version" : {
+                          "type" : "integer",
+                          "example" : 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "RuleSet created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/rule_sets/{rule_set_id}" : {
+      "put" : {
+        "summary" : "Update RuleSet.",
+        "tags" : [ "RuleSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_set_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Movement rules"
+                  },
+                  "rules" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "rule_external_id" : {
+                          "type" : "string",
+                          "example" : "1"
+                        },
+                        "version" : {
+                          "type" : "integer",
+                          "example" : 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "RuleSet updated successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "get" : {
+        "summary" : "Get Rule Set by Ids",
+        "tags" : [ "RuleSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "in" : "path",
+          "name" : "rule_set_id",
+          "required" : true,
+          "description" : "Rule Set Id",
+          "schema" : {
+            "type" : "string",
+            "example" : 1
+          }
+        }, {
+          "in" : "query",
+          "name" : "include_rules",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "Include Rules details"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Return factset details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_sets" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "rule_set_id" : {
+                            "type" : "integer",
+                            "example" : 1
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "example" : "Mobile Grading rules"
+                          },
+                          "tenant" : {
+                            "type" : "string",
+                            "example" : "VRP"
+                          },
+                          "decision_context" : {
+                            "type" : "string",
+                            "example" : "WH_DPV"
+                          },
+                          "is_found" : {
+                            "type" : "boolean",
+                            "example" : true
+                          },
+                          "rules" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "name" : {
+                                  "type" : "string",
+                                  "example" : "mobile RVP"
+                                },
+                                "rule_external_id" : {
+                                  "type" : "string",
+                                  "example" : "1"
+                                },
+                                "version" : {
+                                  "type" : "integer",
+                                  "example" : 1
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/rule_sets/{rule_set_id}/rules" : {
+      "post" : {
+        "summary" : "Create Rule.",
+        "tags" : [ "Rule" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_set_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Movement rules"
+                  },
+                  "salience" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "rule_condition" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "operator" : {
+                          "type" : "string",
+                          "enum" : [ "ALL", "ANY" ]
+                        },
+                        "fact_set_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "result_set_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "result_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "expressions" : {
+                          "type" : "array",
+                          "items" : {
+                            "$ref" : "#/components/schemas/Expressions"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "RuleSet created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "version" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/rule_sets/{rule_set_id}/rules/{rule_external_id}" : {
+      "put" : {
+        "summary" : "Update Rule.",
+        "tags" : [ "Rule" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_set_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_external_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Movement rules"
+                  },
+                  "salience" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "rule_condition" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "operator" : {
+                          "type" : "string",
+                          "enum" : [ "ALL", "ANY" ]
+                        },
+                        "fact_set_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "result_set_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "result_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "expressions" : {
+                          "type" : "array",
+                          "items" : {
+                            "$ref" : "#/components/schemas/Expressions"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "RuleSet created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "version" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "get" : {
+        "summary" : "Get Rules by Ids",
+        "tags" : [ "Rule" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_set_id"
+        }, {
+          "$ref" : "#/components/parameters/rule_external_id"
+        }, {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "in" : "query",
+          "name" : "version",
+          "schema" : {
+            "type" : "integer"
+          },
+          "required" : true,
+          "description" : "Filters based on the version"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return facts details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "rule_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "example" : "Vulcan grade A for apple phone"
+                    },
+                    "description" : {
+                      "type" : "string",
+                      "example" : "Vulcan grade A"
+                    },
+                    "priority" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "rule" : {
+                      "type" : "object",
+                      "properties" : {
+                        "operator" : {
+                          "type" : "string",
+                          "enum" : [ "ALL", "ANY" ]
+                        },
+                        "result_set_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "result_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "version" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "expressions" : {
+                          "type" : "array",
+                          "items" : {
+                            "$ref" : "#/components/schemas/Expressions"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/result_sets" : {
+      "post" : {
+        "summary" : "Create ResultSet.",
+        "tags" : [ "ResultSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "WH_DPV_grading results"
+                  },
+                  "result_ids" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "integer"
+                    },
+                    "example" : [ 1, 2, 3 ]
+                  },
+                  "resule_set_type" : {
+                    "type" : "string",
+                    "enum" : [ "INFERENCE", "DECISION" ],
+                    "example" : "INFERENCE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "ResultSet created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/result_sets/{result_set_id}" : {
+      "put" : {
+        "summary" : "Update ResultSet.",
+        "tags" : [ "ResultSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/result_set_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "WH_DPV_grading results"
+                  },
+                  "result_ids" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "integer"
+                    },
+                    "example" : [ 1, 2, 3 ]
+                  },
+                  "resule_set_type" : {
+                    "type" : "string",
+                    "enum" : [ "INFERENCE", "DECISION" ],
+                    "example" : "INFERENCE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "ResultSet Updated successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "get" : {
+        "summary" : "Get ResultSet by Ids",
+        "tags" : [ "ResultSet" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/result_set_id"
+        }, {
+          "in" : "query",
+          "name" : "include_results",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "Adds results accordingly"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return resultset details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result_sets" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/ResultSet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/result_sets/{result_set_id}/results" : {
+      "post" : {
+        "summary" : "Create Result.",
+        "tags" : [ "Result" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/result_set_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Store"
+                  },
+                  "description" : {
+                    "type" : "string",
+                    "example" : "Move to Store"
+                  },
+                  "value" : {
+                    "type" : "string",
+                    "example" : "store"
+                  },
+                  "priority" : {
+                    "type" : "integer",
+                    "example" : 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Result created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "get" : {
+        "summary" : "Get ResultSet by Ids",
+        "tags" : [ "Result" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/result_set_id"
+        }, {
+          "in" : "query",
+          "name" : "result_ids",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : false,
+          "example" : "1,2,3",
+          "description" : "Filter based on result ids"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return result details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "results" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "required" : [ "name", "value", "description", "priority" ],
+                        "properties" : {
+                          "result_id" : {
+                            "type" : "integer",
+                            "example" : 1
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "example" : "Grade A Result"
+                          },
+                          "tenant" : {
+                            "type" : "string",
+                            "example" : "VRP"
+                          },
+                          "value" : {
+                            "type" : "string",
+                            "minLength" : 3,
+                            "maxLength" : 25,
+                            "example" : "A"
+                          },
+                          "description" : {
+                            "type" : "string",
+                            "example" : "Grade A - No physical issues, perfectly working"
+                          },
+                          "priority" : {
+                            "type" : "integer",
+                            "minimum" : 1,
+                            "maximum" : 1000,
+                            "example" : 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/result_sets/{result_set_id}/results/{result_id}" : {
+      "put" : {
+        "summary" : "Update Result.",
+        "tags" : [ "Result" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        }, {
+          "$ref" : "#/components/parameters/result_set_id"
+        }, {
+          "$ref" : "#/components/parameters/result_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Store"
+                  },
+                  "description" : {
+                    "type" : "string",
+                    "example" : "Move to Store"
+                  },
+                  "value" : {
+                    "type" : "string",
+                    "example" : "store"
+                  },
+                  "priority" : {
+                    "type" : "integer",
+                    "example" : 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Result created successfully.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "result_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/summary/lookups" : {
+      "get" : {
+        "summary" : "Sumarize lookups.",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return lookup summary",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "lookup_summary" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "status" : {
+                            "type" : "string",
+                            "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                            "example" : "CREATED"
+                          },
+                          "count" : {
+                            "type" : "integer",
+                            "example" : 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/search" : {
+      "post" : {
+        "summary" : "Search Lookups.",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "in" : "query",
+          "name" : "include_fact_set",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "include_fact_set in response"
+        }, {
+          "in" : "query",
+          "name" : "include_rule_set",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "include_rule_set in response"
+        }, {
+          "in" : "query",
+          "name" : "include_result_set",
+          "schema" : {
+            "type" : "boolean"
+          },
+          "required" : true,
+          "description" : "include_result_set in response"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "offset" : {
+                    "type" : "integer",
+                    "example" : 2,
+                    "default" : 1
+                  },
+                  "limit" : {
+                    "type" : "integer",
+                    "example" : 20,
+                    "default" : 10,
+                    "minimum" : 10,
+                    "maximum" : 50
+                  },
+                  "status" : {
+                    "type" : "string",
+                    "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                    "example" : "CREATED"
+                  },
+                  "updated_after" : {
+                    "type" : "string",
+                    "example" : "2019-01-13 15:26:10"
+                  },
+                  "updated_untill" : {
+                    "type" : "string",
+                    "example" : "2019-05-13 15:26:10"
+                  },
+                  "lookup_attributes" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "example" : "vertical"
+                        },
+                        "value" : {
+                          "type" : "string",
+                          "example" : "mobile"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Result lookup details.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "count" : {
+                      "type" : "integer",
+                      "example" : 39
+                    },
+                    "has_more" : {
+                      "type" : "boolean",
+                      "example" : true
+                    },
+                    "tenant" : {
+                      "type" : "string",
+                      "example" : "VRP"
+                    },
+                    "decision_context" : {
+                      "type" : "string",
+                      "example" : "WH_DPV"
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                      "example" : "CREATED"
+                    },
+                    "lookup_details" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "lookup_external_id" : {
+                            "type" : "string",
+                            "example" : "1"
+                          },
+                          "lookup_attributes" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "key" : {
+                                  "type" : "string",
+                                  "example" : "vertical"
+                                },
+                                "value" : {
+                                  "type" : "string",
+                                  "example" : "mobile"
+                                }
+                              }
+                            }
+                          },
+                          "rule_set" : {
+                            "type" : "object",
+                            "properties" : {
+                              "id" : {
+                                "type" : "integer",
+                                "example" : 1
+                              },
+                              "name" : {
+                                "type" : "string",
+                                "example" : "Mobile Grading rules"
+                              },
+                              "rules_count" : {
+                                "type" : "integer",
+                                "example" : 4
+                              }
+                            }
+                          },
+                          "fact_set" : {
+                            "type" : "object",
+                            "properties" : {
+                              "id" : {
+                                "type" : "integer",
+                                "example" : 1
+                              },
+                              "name" : {
+                                "type" : "string",
+                                "example" : "Mobile Grading Facts"
+                              },
+                              "facts_count" : {
+                                "type" : "integer",
+                                "example" : 10
+                              }
+                            }
+                          },
+                          "created_by" : {
+                            "type" : "string",
+                            "example" : "preethi.n"
+                          },
+                          "updated_at" : {
+                            "type" : "string",
+                            "example" : "2019-01-13T15:26:10"
+                          },
+                          "created_at" : {
+                            "type" : "string",
+                            "example" : "2019-01-13T15:26:10"
+                          },
+                          "updated_by" : {
+                            "type" : "string",
+                            "example" : "preethi.n"
+                          },
+                          "version" : {
+                            "type" : "integer",
+                            "example" : 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookup_facts" : {
+      "get" : {
+        "summary" : "Get Lookup Attribute values for lookup fact.",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "in" : "query",
+          "name" : "decision_contexts",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "example" : "WH_PV,WH_DPV",
+          "description" : "Filter based on result ids"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Fetch lookup fact for decision_context.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "decision_contexts" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "decision_context_id" : {
+                            "type" : "integer",
+                            "example" : 2
+                          },
+                          "decision_context" : {
+                            "type" : "string",
+                            "example" : "WH_DPV"
+                          },
+                          "lookup_facts" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "id" : {
+                                  "type" : "integer",
+                                  "example" : 4
+                                },
+                                "fact" : {
+                                  "type" : "string",
+                                  "example" : "vertical"
+                                },
+                                "type" : {
+                                  "type" : "string",
+                                  "enum" : [ "BOOLEAN", "STRING", "INT", "DECIMAL" ],
+                                  "example" : "STRING"
+                                },
+                                "mandatory" : {
+                                  "type" : "boolean",
+                                  "example" : true
+                                },
+                                "values" : {
+                                  "type" : "array",
+                                  "items" : {
+                                    "type" : "string"
+                                  },
+                                  "example" : [ "mobile", "television", "computer" ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups" : {
+      "get" : {
+        "summary" : "Get Lookup By Id and version.",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "in" : "query",
+          "name" : "lookup_external_id",
+          "schema" : {
+            "type" : "integer"
+          },
+          "required" : true,
+          "example" : 1,
+          "description" : "Filter based on lookup_external_id"
+        }, {
+          "in" : "query",
+          "name" : "version",
+          "schema" : {
+            "type" : "integer"
+          },
+          "required" : true,
+          "example" : 1,
+          "description" : "Filter based on version"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns Lookups for Lookup Id and version.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "lookup_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "example" : "Vulcan grading lookup"
+                    },
+                    "tenant" : {
+                      "type" : "string",
+                      "example" : "VRP"
+                    },
+                    "decision_context" : {
+                      "type" : "string",
+                      "example" : "WH_PV"
+                    },
+                    "rule_set_id" : {
+                      "type" : "integer",
+                      "example" : 13
+                    },
+                    "result_set_id" : {
+                      "type" : "integer",
+                      "example" : 14
+                    },
+                    "fact_set_id" : {
+                      "type" : "integer",
+                      "example" : 15
+                    },
+                    "lookup_attributes" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "key" : {
+                            "type" : "string",
+                            "example" : "vertical"
+                          },
+                          "value" : {
+                            "type" : "string",
+                            "example" : "mobile"
+                          }
+                        }
+                      }
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                      "example" : "CREATED"
+                    },
+                    "version" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "active" : {
+                      "type" : "boolean",
+                      "example" : true
+                    },
+                    "updated_by" : {
+                      "type" : "string",
+                      "example" : "User1"
+                    },
+                    "created_at" : {
+                      "type" : "string",
+                      "example" : "2019-01-13T15:26:10"
+                    },
+                    "updated_at" : {
+                      "type" : "string",
+                      "example" : "2019-03-14T15:26:10"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Create Lookup",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Mobile Grading Lookup"
+                  },
+                  "lookup_attributes" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string",
+                          "example" : "Mobile"
+                        },
+                        "lookup_fact_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Returns Lookups for Lookup Id and version.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "lookup_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "version" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                      "example" : "CREATED"
+                    },
+                    "rule_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "result_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "fact_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "is_active" : {
+                      "type" : "boolean",
+                      "example" : false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}" : {
+      "put" : {
+        "summary" : "Update Lookup",
+        "description" : "could be used for updating lookup includung state & version change.",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "example" : "Mobile Grading Lookup"
+                  },
+                  "rule_set_id" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "result_set_id" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "fact_set_id" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "status" : {
+                    "type" : "string",
+                    "example" : "CREATED"
+                  },
+                  "active" : {
+                    "type" : "boolean",
+                    "example" : false
+                  },
+                  "version" : {
+                    "type" : "integer",
+                    "example" : 1
+                  },
+                  "lookup_attributes" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string",
+                          "example" : "Mobile"
+                        },
+                        "lookup_fact_id" : {
+                          "type" : "integer",
+                          "example" : 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Returns Lookups for Lookup Id and version.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "lookup_external_id" : {
+                      "type" : "string",
+                      "example" : "1"
+                    },
+                    "version" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "status" : {
+                      "type" : "string",
+                      "enum" : [ "CREATED", "PENDING_APPROVAL", "APPROVED", "REJECTED" ],
+                      "example" : "CREATED"
+                    },
+                    "rule_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "result_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "fact_set_id" : {
+                      "type" : "integer",
+                      "example" : 1
+                    },
+                    "is_active" : {
+                      "type" : "boolean",
+                      "example" : false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    },
+    "/lookups/{lookup_external_id}/approver_details" : {
+      "get" : {
+        "summary" : "Get Approved Lookups",
+        "tags" : [ "Lookup" ],
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/clientId"
+        }, {
+          "$ref" : "#/components/parameters/userId"
+        }, {
+          "$ref" : "#/components/parameters/tenant"
+        }, {
+          "$ref" : "#/components/parameters/decisionContext"
+        }, {
+          "$ref" : "#/components/parameters/lookup_external_id"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns Approved Lookups details",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "active_lookup" : {
+                      "type" : "object",
+                      "properties" : {
+                        "lookup_external_id" : {
+                          "type" : "string",
+                          "example" : "1"
+                        },
+                        "name" : {
+                          "type" : "string",
+                          "example" : "Vulcan grading lookup"
+                        },
+                        "tenant" : {
+                          "type" : "string",
+                          "example" : "VRP"
+                        },
+                        "decision_context" : {
+                          "type" : "string",
+                          "example" : "WH_DPV"
+                        },
+                        "rule_set_id" : {
+                          "type" : "integer",
+                          "example" : 13
+                        },
+                        "result_set_id" : {
+                          "type" : "integer",
+                          "example" : 14
+                        },
+                        "fact_set_id" : {
+                          "type" : "integer",
+                          "example" : 15
+                        },
+                        "lookup_attributes" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "key" : {
+                                "type" : "string",
+                                "example" : "vertical"
+                              },
+                              "value" : {
+                                "type" : "string",
+                                "example" : "mobile"
+                              }
+                            }
+                          }
+                        },
+                        "status" : {
+                          "type" : "string",
+                          "example" : "APPROVED"
+                        },
+                        "version" : {
+                          "type" : "integer",
+                          "example" : 1
+                        },
+                        "active" : {
+                          "type" : "boolean",
+                          "example" : true
+                        },
+                        "updated_by" : {
+                          "type" : "string",
+                          "example" : "preethi.n"
+                        },
+                        "created_at" : {
+                          "type" : "string",
+                          "example" : "2019-01-13T15:26:10"
+                        },
+                        "updated_at" : {
+                          "type" : "string",
+                          "example" : "2019-01-13T15:26:10"
+                        }
+                      }
+                    },
+                    "new_lookup" : {
+                      "type" : "object",
+                      "properties" : {
+                        "lookup_external_id" : {
+                          "type" : "string",
+                          "example" : "2"
+                        },
+                        "name" : {
+                          "type" : "string",
+                          "example" : "Vulcan grading lookup"
+                        },
+                        "tenant" : {
+                          "type" : "string",
+                          "example" : "VRP"
+                        },
+                        "decision_context" : {
+                          "type" : "string",
+                          "example" : "WH_DPV"
+                        },
+                        "rule_set_id" : {
+                          "type" : "integer",
+                          "example" : 13
+                        },
+                        "result_set_id" : {
+                          "type" : "integer",
+                          "example" : 14
+                        },
+                        "fact_set_id" : {
+                          "type" : "integer",
+                          "example" : 15
+                        },
+                        "lookup_attributes" : {
+                          "type" : "array",
+                          "items" : {
+                            "type" : "object",
+                            "properties" : {
+                              "key" : {
+                                "type" : "string",
+                                "example" : "vertical"
+                              },
+                              "value" : {
+                                "type" : "string",
+                                "example" : "mobile"
+                              }
+                            }
+                          }
+                        },
+                        "status" : {
+                          "type" : "string",
+                          "example" : "PENDING_APPROVAL"
+                        },
+                        "version" : {
+                          "type" : "integer",
+                          "example" : 2
+                        },
+                        "active" : {
+                          "type" : "boolean",
+                          "example" : false
+                        },
+                        "updated_by" : {
+                          "type" : "string",
+                          "example" : "preethi.n"
+                        },
+                        "created_at" : {
+                          "type" : "string",
+                          "example" : "2019-01-13T15:26:10"
+                        },
+                        "updated_at" : {
+                          "type" : "string",
+                          "example" : "2019-01-13T15:26:10"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/Standard400ErrorResponse"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/Standard500ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "parameters" : {
+      "clientId" : {
+        "in" : "header",
+        "name" : "X-CLIENT-ID",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        },
+        "description" : "Client id"
+      },
+      "userId" : {
+        "in" : "header",
+        "name" : "X-USER-LOGIN-ID",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        },
+        "description" : "ldap id"
+      },
+      "tenant" : {
+        "in" : "header",
+        "name" : "X-TENANT-ID",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        },
+        "description" : "Tenant Id"
+      },
+      "decisionContext" : {
+        "in" : "header",
+        "name" : "X-DECISION-CONTEXT-ID",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        },
+        "description" : "Decision context Id"
+      },
+      "fact_id" : {
+        "in" : "path",
+        "name" : "fact_id",
+        "required" : true,
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        },
+        "description" : "Fact Id"
+      },
+      "fact_set_id" : {
+        "in" : "path",
+        "name" : "fact_set_id",
+        "required" : true,
+        "description" : "Fact Set Id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      },
+      "rule_set_id" : {
+        "in" : "path",
+        "name" : "rule_set_id",
+        "required" : true,
+        "description" : "Rule Set Id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      },
+      "result_set_id" : {
+        "in" : "path",
+        "name" : "result_set_id",
+        "required" : true,
+        "description" : "Result Set Id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      },
+      "result_id" : {
+        "in" : "path",
+        "name" : "result_id",
+        "required" : true,
+        "description" : "Result Id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      },
+      "lookup_external_id" : {
+        "in" : "path",
+        "name" : "lookup_external_id",
+        "required" : true,
+        "description" : "Lookup external id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      },
+      "rule_external_id" : {
+        "in" : "path",
+        "name" : "rule_external_id",
+        "required" : true,
+        "description" : "Rule external id",
+        "schema" : {
+          "type" : "integer",
+          "minimum" : 1
+        }
+      }
+    },
+    "schemas" : {
+      "id" : {
+        "type" : "integer",
+        "example" : 1
+      },
+      "Results" : {
+        "type" : "object",
+        "required" : [ "name", "value", "description", "priority" ],
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/id"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Grade A Result"
+          },
+          "value" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 25,
+            "example" : "A"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Grade A - No physical issues, perfectly working"
+          },
+          "priority" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 1000,
+            "example" : 10
+          }
+        }
+      },
+      "ResultSet" : {
+        "type" : "object",
+        "required" : [ "reference_id", "tenant", "name", "results" ],
+        "properties" : {
+          "id" : {
+            "$ref" : "#/components/schemas/id"
+          },
+          "name" : {
+            "type" : "string",
+            "minLength" : 3,
+            "maxLength" : 25,
+            "example" : "Mobile Movement Results"
+          },
+          "tenant" : {
+            "type" : "string",
+            "example" : "vrp"
+          },
+          "decision_context" : {
+            "type" : "string",
+            "example" : "wh_inw_vrp"
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Results"
+            }
+          }
+        }
+      },
+      "FactSet" : {
+        "type" : "object",
+        "required" : [ "tenant", "name", "facts" ],
+        "properties" : {
+          "fact_set_id" : {
+            "type" : "integer",
+            "example" : 1
+          },
+          "tenant" : {
+            "type" : "string",
+            "example" : "vrp"
+          },
+          "decision_context" : {
+            "type" : "string",
+            "example" : "wh_inw_vrp"
+          },
+          "fact_set_name" : {
+            "type" : "string",
+            "example" : "Electronics"
+          },
+          "facts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FactEntity"
+            }
+          }
+        }
+      },
+      "FactEntity" : {
+        "type" : "object",
+        "properties" : {
+          "fact_id" : {
+            "type" : "integer",
+            "example" : 1
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "is_broken_screen"
+          },
+          "default_value" : {
+            "type" : "string",
+            "example" : true
+          },
+          "value_type" : {
+            "type" : "string",
+            "example" : "Boolean"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Is Screen Broken ?"
+          },
+          "possible_values" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "required" : [ "display_name", "value" ],
+              "properties" : {
+                "display_name" : {
+                  "type" : "string",
+                  "example" : true
+                },
+                "value" : {
+                  "type" : "string",
+                  "example" : true
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error" : {
+        "required" : [ "message", "error_code", "cause" ],
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "error_code" : {
+            "type" : "string"
+          },
+          "cause" : {
+            "type" : "object"
+          }
+        }
+      },
+      "Expressions" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "properties" : {
+            "operator" : {
+              "type" : "string",
+              "enum" : [ "NOT_EQUAL_TO", "EQUAL_TO", "GREATER_THAN", "LESS_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN_OR_EQUAL_TO", "PRESENT_IN", "NOT_IN", "CONTAINS_ANY", "CONTAINS_ALL", "CONTAINS_NONE", "NOT_SUB_SET", "IS_BLANK" ]
+            },
+            "value" : {
+              "type" : "string",
+              "example" : "mobile"
+            },
+            "fact" : {
+              "type" : "string",
+              "example" : "vertical"
+            }
+          }
+        }
+      }
+    },
+    "responses" : {
+      "Standard200SuccessResponse" : {
+        "description" : "OK."
+      },
+      "Standard201CreatedResponse" : {
+        "description" : "Successfully created."
+      },
+      "Standard204UpdatedResponse" : {
+        "description" : "Successfully updated."
+      },
+      "Standard400ErrorResponse" : {
+        "description" : "Invalid request content.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Standard404ErrorResponse" : {
+        "description" : "Not found.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Standard409ErrorResponse" : {
+        "description" : "Operation failed, Conflict!",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Standard500ErrorResponse" : {
+        "description" : "Operation failed, Unknown error.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers" : [ {
+    "url" : "http://virtserver.swaggerhub.com/KiranJujare/Regnator/v1"
+  } ]
+}
